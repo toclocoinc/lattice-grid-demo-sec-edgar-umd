@@ -143,6 +143,9 @@ body {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 10px;
+  /* The strip is a row of equals. The cell stretches to the tallest of them
+     already; the card inside it sizes to its own text. */
+  height: 100%;
 }
 
 .stat-box .lat-stat__title {

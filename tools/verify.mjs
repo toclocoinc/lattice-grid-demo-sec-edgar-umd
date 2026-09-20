@@ -357,6 +357,32 @@ try {
     check(c.withValue > 0, `saved copy: chart ${c.i} plotted values rather than empty axes`, `${c.withValue} of ${c.points} points carry a measure`);
     check(c.marks > 2, `saved copy: chart ${c.i} drew marks`, `${c.marks} marks`);
   }
+  /*
+   * How many categories each chart actually plotted.
+   *
+   * "It drew marks" and "its data is not empty" are both satisfied by a chart
+   * that has put every row into a single point, which is what a grid whose
+   * rows all key the same produces: the binder reads each row's category *by
+   * key*, so identical keys collapse the lot. The fiscal-year chart has one
+   * point per year of the filing history and is the one that shows it.
+   */
+  const categories = await evaluate(`(() => window.__edgarDemo.charts.map((c, i) => {
+    const data = c.data();
+    const series = Array.isArray(data) ? data : (data && data.series) || [];
+    const points = series.length && series[0].points ? series[0].points : [];
+    return { i, series: series.length, points: points.length,
+             first: points.length ? String(points[0].label ?? points[0].xKey ?? '') : null };
+  }))()`);
+  for (const c of categories) {
+    console.log(`  chart ${c.i}: ${c.series} series, ${c.points} categories, first "${c.first}"`);
+    check(c.points > 1, `saved copy: chart ${c.i} plots more than one category`,
+      `${c.points} point(s), first "${c.first}"`);
+  }
+  const byYear = categories[2];
+  check(byYear && byYear.points >= 10,
+    'saved copy: the revenue-by-fiscal-year chart plots a decade or more of years',
+    `${byYear ? byYear.points : 0} year(s)`);
+
   check(snap.watermark === false, 'saved copy: no watermark on localhost', `state ${snap.licenceState}`);
   /* ------------------------------------------------------------------ */
   /* The main grid, specifically.                                        */

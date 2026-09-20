@@ -551,6 +551,13 @@
       baseGridConfig('Revenue aggregated by fiscal year', {
         columns: byYearColumns(maxRevenue),
         grandTotalRow: 'bottom',
+        /* A grouped summary's rows are the aggregates below -- a fiscal year, a
+           total and a count -- and carry none of the `id` the shared settings
+           key rows by. The fiscal year is what makes one of these rows unlike
+           another, so it is the key. Left as `id`, every row keys the same and
+           anything that reads a value *by key* -- the chart that reads this
+           grid, most of all -- sees the first row's figures for all of them. */
+        rowKey: 'fy',
         source: {
           mode: 'derived',
           from: resultsGrid,
@@ -568,6 +575,8 @@
       el('div', 'grid-pane'),
       baseGridConfig('Revenue by company (sum of annual figures)', {
         columns: byCompanyColumns(maxRevenue),
+        /* Aggregate rows again: keyed by the company, for the same reason. */
+        rowKey: 'company',
         grandTotalRow: 'bottom',
         source: {
           mode: 'derived',
@@ -787,11 +796,18 @@
         axis: { x: 'Quarter end', y: 'Net income (USD)' },
       },
       {
-        type: 'area',
+        /*
+         * A bar per fiscal year, not a filled line. A fiscal year is a label,
+         * not a position on a continuous scale: drawn as an area the axis
+         * treated the years as numbers and wrote them "2,005", "2,010", and
+         * put the gaps between them where arithmetic said rather than where
+         * the filings are. One bar per year is what the figure means.
+         */
+        type: 'bar',
         x: 'fy',
         y: 'revenue',
         title: 'Total revenue by fiscal year',
-        axis: { x: 'Fiscal year', y: 'Revenue (USD)' },
+        axis: { x: { title: 'Fiscal year', labels: true, rotate: 'auto' }, y: 'Revenue (USD)' },
         legend: false,
       },
       {
