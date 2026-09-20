@@ -480,7 +480,9 @@
         el(
           'p',
           'notice',
-          'The SEC EDGAR API could not be reached from the browser, so this is the saved copy. Reloading the page will try again.',
+          'The SEC EDGAR API does not allow browser requests \u2014 it sends no cross-origin header \u2014 so a page like ' +
+            'this one can never read it directly. What you are looking at is the saved copy, refreshed by the snapshot ' +
+            'tool in this repository. Every figure is the SEC\u2019s own; only the fetch is done ahead of time.',
         ),
       );
     }
@@ -736,23 +738,23 @@
       tiles: [
         {
           id: 'revenue',
-          label: 'Combined revenue',
+          label: 'Combined revenue (USD)',
           aggregation: 'custom',
-          format: { type: 'currency', currency: 'USD', decimals: 0 },
+          format: { type: 'compact', decimals: 2 },
           compute: (list) => combinedLatest(list, 'Revenue'),
         },
         {
           id: 'income',
-          label: 'Combined net income',
+          label: 'Combined net income (USD)',
           aggregation: 'custom',
-          format: { type: 'currency', currency: 'USD', decimals: 0 },
+          format: { type: 'compact', decimals: 2 },
           compute: (list) => combinedLatest(list, 'Net income'),
         },
         {
           id: 'revenueYoY',
-          label: 'Revenue, year on year',
+          label: 'Revenue, year on year (USD)',
           aggregation: 'custom',
-          format: { type: 'currency', currency: 'USD', decimals: 0 },
+          format: { type: 'compact', decimals: 2 },
           compute: (list) => combinedLatest(list, 'Revenue') - combinedPrior(list, 'Revenue'),
         },
         {
