@@ -120,14 +120,29 @@ body {
 }
 
 /*
- * The wrapper is the cell the tile sits in, not a card in its own right.
- * `createStat` draws a bordered, padded, rounded panel of its own, so a
- * wrapper that drew one too put a card inside a card: two borders, two
- * backgrounds and a grey gutter between them. The tile is the card; this is
- * only where it goes.
+ * One card per figure.
+ *
+ * The wrapper is the cell the tile sits in, not a card of its own -- two
+ * boxes each drawing a border, a background and a padding read as a card
+ * inside a card. The card is the tile itself, drawn below.
  */
 .stat-box {
   min-width: 0;
+}
+
+/*
+ * The tile's card. `createStat` already asks for one, but the rule it uses
+ * names `--lattice-bg` and `--lattice-border`, and the theme publishes
+ * `--lattice-background` and `--lattice-border-color`, so the tile computes a
+ * transparent background and no border and nothing is drawn. Naming the
+ * demo's own panel colours here is what puts the card on the page; the
+ * module keeps its padding, its radius and the status band down the leading
+ * edge, which is a more specific rule and so survives the border below.
+ */
+.stat-box .lat-stat {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
 }
 
 .stat-box .lat-stat__title {

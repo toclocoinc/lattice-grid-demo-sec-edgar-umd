@@ -354,8 +354,7 @@
         statusBar: true,
         find: true,
         grandTotalRow: false,
-        toolPanel: { side: 'right', panels: ['filters', 'columns', 'formatting'] },
-        title,
+          title,
       },
       extra || {},
     );
