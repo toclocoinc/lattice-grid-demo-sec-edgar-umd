@@ -513,6 +513,8 @@
     const resultsGrid = createGrid(
       resultsPane,
       baseGridConfig('Reported results, annual and quarterly', {
+        /* Two-line cells (name over ticker) need more than a compact row. */
+        rowHeight: 40,
         columns: resultsColumns(pctMax),
         sort: [{ col: 'end', dir: 'desc' }],
         formatting: {
@@ -534,6 +536,8 @@
     const annualRevenueGrid = createGrid(
       el('div', 'grid-pane'),
       baseGridConfig('Annual revenue by company', {
+        /* Two-line cells (name over ticker) need more than a compact row. */
+        rowHeight: 40,
         columns: annualRevenueColumns(pctMax),
         source: {
           mode: 'derived',
@@ -574,6 +578,8 @@
     const byCompanyGrid = createGrid(
       el('div', 'grid-pane'),
       baseGridConfig('Revenue by company (sum of annual figures)', {
+        /* Two-line cells (name over ticker) need more than a compact row. */
+        rowHeight: 40,
         columns: byCompanyColumns(maxRevenue),
         /* Aggregate rows again: keyed by the company, for the same reason. */
         rowKey: 'company',
@@ -813,7 +819,7 @@
       {
         type: 'histogram',
         y: 'changePct',
-        buckets: 20,
+        buckets: 10,
         title: 'Annual revenue, year on year %',
         axis: { x: 'Change (%)', y: 'Years' },
         legend: false,
