@@ -54,7 +54,7 @@ const shotDir = shotIndex >= 0 ? resolve(args[shotIndex + 1]) : null;
 const all = args.includes('--all');
 
 /** The release every library tag must name, and the globals each file leaves. */
-const GRID_VERSION = '1.111.5';
+const GRID_VERSION = '1.123.3';
 const CDN_BASE = `https://cdn.latticegrid.dev/lattice-grid@${GRID_VERSION}/`;
 const LIBRARY_TAGS = [
   { file: 'lattice-grid.min.js', global: 'LatticeGrid', member: 'createGrid' },
@@ -282,9 +282,9 @@ try {
     return {
       moduleScripts: scripts.filter((s) => s.type === 'module').length,
       importmaps: scripts.filter((s) => s.type === 'importmap').length,
-      librarySrcs: scripts.map((s) => s.getAttribute('src') || '').filter((src) => /cdn\\.latticegrid\\.dev/.test(src)),
+      librarySrcs: scripts.map((s) => (s.getAttribute('src') || '').replace(/\\?v=[^&]*$/, '')).filter((src) => /cdn\\.latticegrid\\.dev/.test(src)),
       withIntegrity: scripts.filter((s) => /cdn\\.latticegrid\\.dev/.test(s.src) && s.integrity).length,
-      stylesheetSrc: (document.querySelector('link[rel=stylesheet][href*="cdn.latticegrid.dev"]') || {}).href || null,
+      stylesheetSrc: ((document.querySelector('link[rel=stylesheet][href*="cdn.latticegrid.dev"]') || {}).href || '').replace(/\\?v=[^&]*$/, '') || null,
       stylesheetIntegrity: (document.querySelector('link[rel=stylesheet][href*="cdn.latticegrid.dev"]') || {}).integrity || null,
       globals,
       members: {

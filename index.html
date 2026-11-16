@@ -10,15 +10,16 @@
     />
     <link rel="icon" href="data:," />
     <!--
-      The grid's stylesheet, from jsDelivr. Every address on this page names
-      the exact release, 1.87.0, and carries the hash of the file it expects,
-      so the page can never quietly pick up a different build than the one it
-      was checked against.
+      The grid's stylesheet and scripts, from the Lattice Grid CDN. Every
+      address is built from the one BASE constant below, so the page names
+      exactly one release and moving to another is a one-line change. STAMP
+      is the cache stamp appended as ?v= to each address.
     -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.latticegrid.dev/lattice-grid@1.111.5/lattice-grid.min.css"
-    />
+    <script>
+      var BASE = 'https://cdn.latticegrid.dev/lattice-grid@1.123.3/';
+      var STAMP = '20261116';
+      document.write('<link rel="stylesheet" href="' + BASE + 'lattice-grid.min.css?v=' + STAMP + '">');
+    </script>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -43,21 +44,12 @@
       global rather than defining its own, so the core has to be there first.
       The other three are self-contained and could go in any order.
     -->
-    <script
-      src="https://cdn.latticegrid.dev/lattice-grid@1.111.5/lattice-grid.min.js"
-    ></script>
-    <script
-      src="https://cdn.latticegrid.dev/lattice-grid@1.111.5/modules/charts.min.js"
-    ></script>
-    <script
-      src="https://cdn.latticegrid.dev/lattice-grid@1.111.5/modules/data-router.min.js"
-    ></script>
-    <script
-      src="https://cdn.latticegrid.dev/lattice-grid@1.111.5/modules/kpi.min.js"
-    ></script>
-    <script
-      src="https://cdn.latticegrid.dev/lattice-grid@1.111.5/modules/tabs.min.js"
-    ></script>
+
+    <script>
+      ['lattice-grid', 'modules/charts', 'modules/data-router', 'modules/kpi', 'modules/tabs'].forEach(function (name) {
+        document.write('<script src="' + BASE + name + '.min.js?v=' + STAMP + '"><\/script>');
+      });
+    </script>
 
     <!-- The demo's own code, in the order each file needs the one before it. -->
     <script src="./src/licence.js"></script>

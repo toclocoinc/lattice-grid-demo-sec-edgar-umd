@@ -29,16 +29,21 @@ figure and the table beneath it can never disagree.
 
 ## How the grid gets onto the page
 
-Six tags in `index.html`, and that is the whole of the library setup:
+Six tags in `index.html`, and that is the whole of the library setup. The
+address is written once, as a `BASE` constant at the top of the page, and each
+tag is built from it with a `?v=` cache stamp:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.87.0/lattice-grid.min.css">
-
-<script src="https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.87.0/lattice-grid.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.87.0/modules/charts.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.87.0/modules/data-router.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.87.0/modules/kpi.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@toclocoinc/lattice-grid@1.87.0/modules/tabs.min.js"></script>
+<script>
+  var BASE = 'https://cdn.latticegrid.dev/lattice-grid@<release>/';
+  var STAMP = '<stamp>';
+</script>
+<link rel="stylesheet" href="BASE + lattice-grid.min.css?v=STAMP">
+<script src="BASE + lattice-grid.min.js?v=STAMP"></script>
+<script src="BASE + modules/charts.min.js?v=STAMP"></script>
+<script src="BASE + modules/data-router.min.js?v=STAMP"></script>
+<script src="BASE + modules/kpi.min.js?v=STAMP"></script>
+<script src="BASE + modules/tabs.min.js?v=STAMP"></script>
 ```
 
 Each file is the package's UMD build (`*.min.js`, beside the `*.esm.min.js`
@@ -63,10 +68,9 @@ This demo builds its own small tab strip because the derived views need
 shorthand does not forward. The tabs and data-router tags are still loaded, as
 the six-tag set is what the page is checked against.
 
-Every address names the exact release, `1.87.0`, and every tag carries the
-`integrity` hash of the file it expects. The page cannot quietly pick up a
-different build than the one it was checked against, and the browser refuses a
-file that does not match. The hashes are the SHA-384 of the published files.
+Every address names one exact release, set once in `BASE`, so the page cannot
+quietly pick up a different build than the one it was checked against. Moving
+to another release is a one-line change to `BASE` and `STAMP`.
 
 The demo's own code is four classic scripts, loaded in order after the
 library: `src/licence.js`, `src/edgar-feed.js`, `src/dashboard.js`, `main.js`.
@@ -214,7 +218,7 @@ node tools/verify.mjs --all   # also open the live address
 
 `tools/verify.mjs` is not a smoke test. It first insists on how the library
 arrived: no `type="module"` script anywhere on the page, five script tags
-pointing at the pinned release on the CDN, each with an integrity hash, and
+pointing at the pinned release on the CDN, and
 each leaving the global it documents. It then recomputes the headline figures
 from the saved data and compares them with what the page is showing, checks the
 derived grids hold the rows they should (annual revenue, revenue by year,
